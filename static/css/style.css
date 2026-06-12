@@ -1,0 +1,25 @@
+body { font-family: 'Cambria', serif; font-size: 1.15rem; background-color: #ffffff; margin: 0; overflow: hidden; color: #1f1f1f; }
+.wrapper { display: flex; height: 100vh; overflow: hidden; position: relative; }
+
+#sidebar { width: 300px; background-color: #f0f4f9; display: flex; flex-direction: column; transition: margin-left 0.3s ease; flex-shrink: 0; z-index: 1000; border-right: 1px solid #e0e0e0; }
+#sidebar.collapsed { margin-left: -300px; }
+
+.sidebar-header { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
+.nav-section-title { font-size: 0.85rem; font-weight: bold; color: #444746; margin: 15px 24px 5px 24px; text-transform: uppercase; letter-spacing: 1px; }
+
+.nav-link { color: #444746; padding: 10px 24px; margin: 2px 10px; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 15px; font-size: 1.05rem; font-weight: bold; }
+.nav-link:hover, .nav-link.active { background-color: #e8eaed; color: #1f1f1f; }
+
+.tools-dropdown-btn { color: #444746; padding: 10px 24px; margin: 2px 10px; border-radius: 50px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-size: 1.05rem; font-weight: bold; border: none; background: transparent; width: calc(100% - 20px); }
+
+.sidebar-menu-wrapper { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+.sidebar-menu-wrapper.expanded { max-height: 600px; }
+
+#content { flex-grow: 1; display: flex; flex-direction: column; height: 100vh; overflow-y: auto; }
+.top-header { padding: 12px 24px; display: flex; align-items: center; border-bottom: 1px solid #e0e0e0; }
+.icon-btn { background: none; border: none; color: #444746; font-size: 1.3rem; cursor: pointer; padding: 10px; border-radius: 50%; }
+
+.clock-container { background-color: #f0f4f9; padding: 8px 20px; border-radius: 16px; border: 1px solid #e0e0e0; text-align: right; min-width: 230px; }
+#clock-time { font-size: 1.25rem; font-weight: 700; color: #1a73e8; }
+#clock-gregorian { font-size: 0.85rem; font-weight: bold; color: #444746; }
+#clock-hijri { font-size: 0.82rem; font-weight: bold; color: #137333; border-top: 1px dashed #ced4da; margin-top: 3px; }
