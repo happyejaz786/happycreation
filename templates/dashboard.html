@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAPPYEJAZ CREATION</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Viewport Setup */
+        body { font-family: 'Cambria', serif; font-size: 1.15rem; background-color: #ffffff; margin: 0; overflow: hidden; color: #1f1f1f; }
+        .wrapper { display: flex; height: 100vh; overflow: hidden; position: relative; }
+        
+        /* Sidebar Structural Layout */
+        #sidebar { width: 300px; background-color: #f0f4f9; display: flex; flex-direction: column; transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1); flex-shrink: 0; z-index: 1000; border-right: 1px solid #e0e0e0; position: relative; }
+        #sidebar.collapsed { margin-left: -300px; }
+        
+        .sidebar-header { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
+        .sidebar-header h5 { margin: 0; font-weight: 600; font-size: 1.2rem; color: #444746; letter-spacing: 0.5px; }
+        
+        /* Control Elements */
+        .new-chat-btn { margin: 0 15px 15px 15px; padding: 12px 15px; border-radius: 50px; background-color: #c2e7ff; color: #001d35; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background-color 0.2s; font-family: 'Cambria', serif; font-size: 1.1rem; width: calc(100% - 30px); }
+        .new-chat-btn:hover { background-color: #b3d4ec; }
+
+        .nav-section-title { font-size: 0.85rem; font-weight: bold; color: #444746; margin: 15px 24px 5px 24px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* Custom Accordion Trigger Layout */
+        .tools-dropdown-btn { color: #444746; padding: 10px 24px; margin: 2px 10px; border-radius: 50px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-size: 1.05rem; font-weight: bold; transition: background-color 0.2s; width: calc(100% - 20px); border: none; background: transparent; text-align: left; }
+        .tools-dropdown-btn:hover { background-color: #e8eaed; color: #1f1f1f; }
+        .tools-dropdown-btn .chevron-icon { transition: transform 0.3s ease; font-size: 0.8rem; }
+        .tools-dropdown-btn:not(.active) .chevron-icon { transform: rotate(-90deg); }
+
+        .sidebar-menu-wrapper { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1); padding-left: 0; }
+        .sidebar-menu-wrapper.expanded { max-height: 600px; overflow: visible; }
+
+        .nav-link { color: #444746; padding: 10px 24px; margin: 2px 10px; border-radius: 50px; transition: 0.2s; cursor: pointer; display: flex; align-items: center; gap: 15px; font-size: 1.05rem; font-weight: bold; text-decoration: none; }
+        .nav-link:hover, .nav-link.active { background-color: #e8eaed; color: #1f1f1f; }
+        .nav-link i { font-size: 1.2rem; width: 25px; text-align: center; }
+        
+        /* History Items List Layout */
+        .history-list { flex-grow: 1; overflow-y: auto; max-height: 240px; padding-bottom: 10px; overflow-x: hidden; }
+        .history-item { color: #444746; margin: 2px 10px; padding: 6px 16px 6px 20px; border-radius: 50px; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; font-size: 1rem; cursor: pointer; position: relative; }
+        .history-item:hover, .history-item.active { background-color: #e8eaed; color: #1f1f1f; }
+        
+        /* Main Workspace Viewports */
+        #content { flex-grow: 1; display: flex; flex-direction: column; height: 100vh; min-width: 0; position: relative; z-index: 1; background-color: #ffffff; }
+        .top-header { padding: 12px 24px; display: flex; align-items: center; background: #ffffff; border-bottom: 1px solid #e0e0e0; z-index: 10; }
+        
+        .icon-btn { background: none; border: none; color: #444746; font-size: 1.3rem; cursor: pointer; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; transition: background-color 0.2s; }
+        .icon-btn:hover { background-color: #f0f4f9; }
+        .header-title { font-size: 1.4rem; font-weight: bold; color: #1f1f1f; margin-left: 15px; }
+        
+        /* Dual Calendar Clock Display Layout */
+        .clock-container { background-color: #f0f4f9; padding: 8px 20px; border-radius: 16px; border: 1px solid #e0e0e0; text-align: right; line-height: 1.3; min-width: 230px; }
+        #clock-time { font-size: 1.25rem; font-weight: 700; color: #1a73e8; letter-spacing: 0.5px; }
+        #clock-gregorian { font-size: 0.85rem; font-weight: bold; color: #444746; margin-top: 2px; }
+        #clock-hijri { font-size: 0.82rem; font-weight: bold; color: #137333; border-top: 1px dashed #ced4da; margin-top: 3px; padding-top: 2px; }
+        
+        /* Central Module sandbox frame */
+        #module-container { display: none; width: 100%; height: calc(100vh - 85px); border: none; background-color: #ffffff; }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h5>HAPPY TOOLS</h5>
+            <button class="icon-btn" id="sidebarCloseBtn" title="Collapse menu"><i class="fa-solid fa-chevron-left"></i></button>
+        </div>
+
+        <button class="new-chat-btn" id="btn-new-chat">
+            <i class="fa-solid fa-plus"></i> New Chat
+        </button>
+
+        <div class="nav-section-title">Core Systems</div>
+        
+        <div class="nav-link" id="tab-assistant" data-mode="assistant" data-url="/assistant">
+            <i class="fa-solid fa-robot"></i> Happy Assistant
+        </div>
+        
+        <button type="button" class="tools-dropdown-btn" data-menu-target="historyCollapse">
+            <span><i class="fa-solid fa-clock-rotate-left me-2"></i> Recent Chats</span>
+            <i class="fa-solid fa-chevron-down chevron-icon"></i>
+        </button>
+        <div class="sidebar-menu-wrapper" id="historyCollapse">
+            <div class="history-list" id="history-list">
+                <div class="history-item text-muted justify-content-center" style="font-size: 0.9rem;">No recent chats</div>
+            </div>
+        </div>
+
+        <div class="nav-section-title">Advanced Suite</div>
+
+        <button type="button" class="tools-dropdown-btn" data-menu-target="toolsCollapse">
+            <span><i class="fa-solid fa-boxes-stacked me-2"></i> Advanced Tools</span>
+            <i class="fa-solid fa-chevron-down chevron-icon"></i>
+        </button>
+        
+        <div class="sidebar-menu-wrapper" id="toolsCollapse">
+            <div class="nav-link" id="tab-image-gen" data-mode="image-gen" data-url="/image-generator"><i class="fa-solid fa-wand-magic-sparkles"></i> Image Generator</div>
+            <div class="nav-link" id="tab-resume" data-mode="resume" data-url="/resume"><i class="fa-solid fa-file-invoice"></i> Resume Builder</div>
+            <div class="nav-link" id="tab-unicode-converter" data-mode="unicode-converter" data-url="/unicode_converter"><i class="fa-solid fa-language"></i> Hindi Typing Tool</div>
+			<div class="nav-link" id="tab-messenger" data-mode="messenger" data-url="/messenger"><i class="fa-solid fa-comment-dots"></i> Happy Messenger</div>
+            <div class="nav-link" id="tab-pdf" data-mode="pdf" data-url="/pdf-tools"><i class="fa-solid fa-file-pdf"></i> PDF Tools</div>
+            <div class="nav-link" id="tab-image-tools" data-mode="image-tools" data-url="/image-tools"><i class="fa-solid fa-image"></i> Image Tools</div>
+        </div>
+    </nav>
+
+    <div id="content">
+        <div class="top-header">
+            <button id="sidebarToggle" class="icon-btn" title="Main menu"><i class="fa-solid fa-bars"></i></button>
+            <div class="header-title">HAPPYEJAZ CREATION</div>
+            
+            <div class="ms-auto clock-container">
+                <div id="clock-time">--:--:-- --</div>
+                <div id="clock-gregorian">Loading Date...</div>
+                <div id="clock-hijri">Loading Hijri...</div>
+            </div>
+        </div>
+
+        <iframe id="module-container" name="module-container" src=""></iframe>
+        
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/main.js"></script>
+<script src="/static/js/history_manager.js"></script>
+</body>
+</html>
